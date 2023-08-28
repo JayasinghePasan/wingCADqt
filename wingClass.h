@@ -12,7 +12,7 @@ private:
     int spanLength;
 
 public:
-    wingClass(std::string wingName);
+    wingClass(std::string wingName, double chord, double span);
 
     std::string wingName;                                   //stores wing name
     std::vector <std::pair<double, double>> dataVector;     //stores coordinates in 0-1 frame

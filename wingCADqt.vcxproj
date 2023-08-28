@@ -189,6 +189,7 @@
     </QtUic>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cadmodelwidget.cpp" />
     <ClCompile Include="coolTools.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
@@ -221,6 +222,7 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cadmodelwidget.h" />
     <ClInclude Include="coolTools.h" />
     <ClInclude Include="wingClass.h" />
   </ItemGroup>

@@ -12,8 +12,11 @@
 
 
 //Constructor
-wingClass::wingClass(std::string wingName) {
-    this->wingName = wingName;
+wingClass::wingClass(std::string wingName, double chord, double span) {
+    this->wingName    = wingName;
+    this->chordLength = chord;
+    this->spanLength  = span;
+
     if (this->readFiles())
     {
         //############## QT Console ##################

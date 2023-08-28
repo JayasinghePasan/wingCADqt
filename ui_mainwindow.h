@@ -15,14 +15,14 @@
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
-#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QOpenGLWidget>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
-#include <QtWidgets/QTreeView>
+#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -32,24 +32,22 @@ class Ui_MainWindow
 public:
     QWidget *centralwidget;
     QGridLayout *gridLayout_4;
-    QFrame *frame;
-    QGridLayout *gridLayout_3;
-    QOpenGLWidget *openGLWidget;
     QFrame *frame_2;
     QGridLayout *gridLayout;
-    QTreeView *treeView;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
-    QLabel *label;
-    QDoubleSpinBox *doubleSpinBox;
     QLabel *label_2;
-    QDoubleSpinBox *doubleSpinBox_2;
+    QLabel *label;
+    QPushButton *buildButton;
     QLabel *label_4;
-    QComboBox *comboBox;
     QLabel *label_3;
-    QDoubleSpinBox *doubleSpinBox_3;
-    QPushButton *pushButton_4;
+    QComboBox *formatComboBox;
+    QDoubleSpinBox *spanDoubleSpinBox_2;
+    QDoubleSpinBox *chordDoubleSpinBox;
     QPushButton *pushButton_3;
+    QDoubleSpinBox *doubleSpinBox_3;
+    QTextEdit *textEdit;
+    QFrame *frame;
+    QVBoxLayout *verticalLayout;
+    QOpenGLWidget *openGLWidget;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -62,6 +60,77 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         gridLayout_4 = new QGridLayout(centralwidget);
         gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
+        frame_2 = new QFrame(centralwidget);
+        frame_2->setObjectName(QString::fromUtf8("frame_2"));
+        frame_2->setFrameShape(QFrame::StyledPanel);
+        frame_2->setFrameShadow(QFrame::Raised);
+        gridLayout = new QGridLayout(frame_2);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        label_2 = new QLabel(frame_2);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+
+        gridLayout->addWidget(label_2, 2, 0, 1, 1);
+
+        label = new QLabel(frame_2);
+        label->setObjectName(QString::fromUtf8("label"));
+
+        gridLayout->addWidget(label, 1, 0, 1, 1);
+
+        buildButton = new QPushButton(frame_2);
+        buildButton->setObjectName(QString::fromUtf8("buildButton"));
+
+        gridLayout->addWidget(buildButton, 4, 0, 1, 2);
+
+        label_4 = new QLabel(frame_2);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+
+        gridLayout->addWidget(label_4, 3, 0, 1, 1);
+
+        label_3 = new QLabel(frame_2);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+
+        gridLayout->addWidget(label_3, 5, 0, 1, 1);
+
+        formatComboBox = new QComboBox(frame_2);
+        formatComboBox->addItem(QString());
+        formatComboBox->addItem(QString());
+        formatComboBox->addItem(QString());
+        formatComboBox->setObjectName(QString::fromUtf8("formatComboBox"));
+
+        gridLayout->addWidget(formatComboBox, 3, 1, 1, 1);
+
+        spanDoubleSpinBox_2 = new QDoubleSpinBox(frame_2);
+        spanDoubleSpinBox_2->setObjectName(QString::fromUtf8("spanDoubleSpinBox_2"));
+        spanDoubleSpinBox_2->setMaximum(999999.000000000000000);
+        spanDoubleSpinBox_2->setValue(1.000000000000000);
+
+        gridLayout->addWidget(spanDoubleSpinBox_2, 2, 1, 1, 1);
+
+        chordDoubleSpinBox = new QDoubleSpinBox(frame_2);
+        chordDoubleSpinBox->setObjectName(QString::fromUtf8("chordDoubleSpinBox"));
+        chordDoubleSpinBox->setMaximum(999999.000000000000000);
+        chordDoubleSpinBox->setValue(1.000000000000000);
+
+        gridLayout->addWidget(chordDoubleSpinBox, 1, 1, 1, 1);
+
+        pushButton_3 = new QPushButton(frame_2);
+        pushButton_3->setObjectName(QString::fromUtf8("pushButton_3"));
+
+        gridLayout->addWidget(pushButton_3, 6, 0, 1, 2);
+
+        doubleSpinBox_3 = new QDoubleSpinBox(frame_2);
+        doubleSpinBox_3->setObjectName(QString::fromUtf8("doubleSpinBox_3"));
+
+        gridLayout->addWidget(doubleSpinBox_3, 5, 1, 1, 1);
+
+        textEdit = new QTextEdit(frame_2);
+        textEdit->setObjectName(QString::fromUtf8("textEdit"));
+
+        gridLayout->addWidget(textEdit, 0, 0, 1, 2);
+
+
+        gridLayout_4->addWidget(frame_2, 0, 1, 1, 1);
+
         frame = new QFrame(centralwidget);
         frame->setObjectName(QString::fromUtf8("frame"));
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -71,89 +140,15 @@ public:
         frame->setSizePolicy(sizePolicy);
         frame->setFrameShape(QFrame::StyledPanel);
         frame->setFrameShadow(QFrame::Raised);
-        gridLayout_3 = new QGridLayout(frame);
-        gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
+        verticalLayout = new QVBoxLayout(frame);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         openGLWidget = new QOpenGLWidget(frame);
         openGLWidget->setObjectName(QString::fromUtf8("openGLWidget"));
 
-        gridLayout_3->addWidget(openGLWidget, 0, 0, 1, 1);
+        verticalLayout->addWidget(openGLWidget);
 
 
         gridLayout_4->addWidget(frame, 0, 0, 1, 1);
-
-        frame_2 = new QFrame(centralwidget);
-        frame_2->setObjectName(QString::fromUtf8("frame_2"));
-        frame_2->setFrameShape(QFrame::StyledPanel);
-        frame_2->setFrameShadow(QFrame::Raised);
-        gridLayout = new QGridLayout(frame_2);
-        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        treeView = new QTreeView(frame_2);
-        treeView->setObjectName(QString::fromUtf8("treeView"));
-
-        gridLayout->addWidget(treeView, 0, 0, 1, 2);
-
-        pushButton = new QPushButton(frame_2);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
-
-        gridLayout->addWidget(pushButton, 1, 0, 1, 1);
-
-        pushButton_2 = new QPushButton(frame_2);
-        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
-
-        gridLayout->addWidget(pushButton_2, 1, 1, 1, 1);
-
-        label = new QLabel(frame_2);
-        label->setObjectName(QString::fromUtf8("label"));
-
-        gridLayout->addWidget(label, 2, 0, 1, 1);
-
-        doubleSpinBox = new QDoubleSpinBox(frame_2);
-        doubleSpinBox->setObjectName(QString::fromUtf8("doubleSpinBox"));
-
-        gridLayout->addWidget(doubleSpinBox, 2, 1, 1, 1);
-
-        label_2 = new QLabel(frame_2);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
-
-        gridLayout->addWidget(label_2, 3, 0, 1, 1);
-
-        doubleSpinBox_2 = new QDoubleSpinBox(frame_2);
-        doubleSpinBox_2->setObjectName(QString::fromUtf8("doubleSpinBox_2"));
-
-        gridLayout->addWidget(doubleSpinBox_2, 3, 1, 1, 1);
-
-        label_4 = new QLabel(frame_2);
-        label_4->setObjectName(QString::fromUtf8("label_4"));
-
-        gridLayout->addWidget(label_4, 4, 0, 1, 1);
-
-        comboBox = new QComboBox(frame_2);
-        comboBox->setObjectName(QString::fromUtf8("comboBox"));
-
-        gridLayout->addWidget(comboBox, 4, 1, 1, 1);
-
-        label_3 = new QLabel(frame_2);
-        label_3->setObjectName(QString::fromUtf8("label_3"));
-
-        gridLayout->addWidget(label_3, 6, 0, 1, 1);
-
-        doubleSpinBox_3 = new QDoubleSpinBox(frame_2);
-        doubleSpinBox_3->setObjectName(QString::fromUtf8("doubleSpinBox_3"));
-
-        gridLayout->addWidget(doubleSpinBox_3, 6, 1, 1, 1);
-
-        pushButton_4 = new QPushButton(frame_2);
-        pushButton_4->setObjectName(QString::fromUtf8("pushButton_4"));
-
-        gridLayout->addWidget(pushButton_4, 5, 0, 1, 2);
-
-        pushButton_3 = new QPushButton(frame_2);
-        pushButton_3->setObjectName(QString::fromUtf8("pushButton_3"));
-
-        gridLayout->addWidget(pushButton_3, 7, 0, 1, 2);
-
-
-        gridLayout_4->addWidget(frame_2, 0, 1, 1, 1);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
@@ -172,14 +167,19 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        pushButton->setText(QCoreApplication::translate("MainWindow", "Select", nullptr));
-        pushButton_2->setText(QCoreApplication::translate("MainWindow", "Refresh", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "Chord", nullptr));
-        label_2->setText(QCoreApplication::translate("MainWindow", "Span", nullptr));
+        label_2->setText(QCoreApplication::translate("MainWindow", "Span Length", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "Chord Length", nullptr));
+        buildButton->setText(QCoreApplication::translate("MainWindow", "Build", nullptr));
         label_4->setText(QCoreApplication::translate("MainWindow", "Format", nullptr));
-        label_3->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
-        pushButton_4->setText(QCoreApplication::translate("MainWindow", "Build", nullptr));
+        label_3->setText(QCoreApplication::translate("MainWindow", "Wind Speed", nullptr));
+        formatComboBox->setItemText(0, QCoreApplication::translate("MainWindow", "Step (.step)", nullptr));
+        formatComboBox->setItemText(1, QCoreApplication::translate("MainWindow", "IGES (.iges)", nullptr));
+        formatComboBox->setItemText(2, QString());
+
+        spanDoubleSpinBox_2->setSuffix(QCoreApplication::translate("MainWindow", " cm", nullptr));
+        chordDoubleSpinBox->setSuffix(QCoreApplication::translate("MainWindow", " cm", nullptr));
         pushButton_3->setText(QCoreApplication::translate("MainWindow", "Run FEA", nullptr));
+        textEdit->setPlaceholderText(QString());
     } // retranslateUi
 
 };
