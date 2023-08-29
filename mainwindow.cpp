@@ -8,9 +8,11 @@
 #include <QTreeWidgetItem>
 #include <QIcon>
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+
 {
     ui->setupUi(this);
     statusBar()->showMessage("Aerofoil Tools by Pasan Jayasinghe Version 0.1");
@@ -23,9 +25,11 @@ MainWindow::~MainWindow()
 
 
 void MainWindow::on_textEdit_textChanged() {
+    statusBar()->showMessage("Data updated...");
     QString text = ui->textEdit->toPlainText();
     saveTextToFile(text);
 }
+
 
 void MainWindow::saveTextToFile(const QString &text) {
     QFile file("tempAerofoilData.txt");
@@ -34,10 +38,9 @@ void MainWindow::saveTextToFile(const QString &text) {
         out << text;
         file.close();
     } else {
-        // You can add error handling here, e.g., show a message box.
+        statusBar()->showMessage("tempAerofoilData.txt is unable to reach.");
     }
 }
-
 
 
 #include "wingClass.h"
@@ -48,4 +51,5 @@ void MainWindow::on_buildButton_clicked()
     double span  = ui->spanDoubleSpinBox_2->value();
     wingClass thiswing("defaultRequest",chord, span);
 }
+
 

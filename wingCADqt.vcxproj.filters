@@ -49,9 +49,6 @@
     <ClCompile Include="wingClass.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="cadmodelwidget.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -67,19 +64,16 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="wingClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="coolTools.h">
-      <Filter>Header Files</Filter>
+      <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="cadmodelwidget.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="wingClass.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="mainwindow.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>
