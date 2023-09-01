@@ -24,6 +24,7 @@ private slots:
 
     void on_buildButton_clicked();
 
+
 private:
     Ui::MainWindow *ui;
 

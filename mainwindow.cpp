@@ -44,12 +44,16 @@ void MainWindow::saveTextToFile(const QString &text) {
 
 
 #include "wingClass.h"
+
 void MainWindow::on_buildButton_clicked()
 {
     statusBar()->showMessage("Build Started...");
     double chord = ui->chordDoubleSpinBox->value();
     double span  = ui->spanDoubleSpinBox_2->value();
-    wingClass thiswing("defaultRequest",chord, span);
+    int index = ui->formatComboBox->currentIndex();
+    const QString filename = ui->filename->text();
+    wingClass thiswing("defaultRequest",chord, span, index, filename.toStdString());
+
 }
 
 

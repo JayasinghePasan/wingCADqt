@@ -13,7 +13,7 @@
 
 
 //Constructor
-wingClass::wingClass(std::string wingName, double chord, double span) {
+wingClass::wingClass(std::string wingName, double chord, double span, int index, std::string filename) {
     this->wingName    = wingName;
     this->chordLength = chord;
     this->spanLength  = span;
@@ -33,6 +33,8 @@ wingClass::wingClass(std::string wingName, double chord, double span) {
 
     TopoDS_Wire profile = Create2DProfile(dataVector);
     TopoDS_Shape extrudedShape = ExtrudeProfile( profile, spanLength);
+    ExportFile(filename, index, extrudedShape);
+
 }
 
 
@@ -125,4 +127,18 @@ TopoDS_Shape wingClass::ExtrudeProfile(const TopoDS_Wire& profile, double l)
     gp_Vec extrusionDirection(0, 0, l);  // Extrude in the Z direction
     BRepPrimAPI_MakePrism prismMaker(profile, extrusionDirection);
     return prismMaker.Shape();
+}
+
+
+void wingClass::ExportFile(std::string filename, int index, TopoDS_Shape& extrudedShape)
+{
+    if (index == 0) ExportToBREP(extrudedShape, filename);
+    if (index == 1) ExportToBREP(extrudedShape, filename);
+    if (index == 2) ExportToBREP(extrudedShape, filename);
+}
+
+void wingClass::ExportToBREP(TopoDS_Shape& shape, std::string filename)
+{
+    filename = filename + ".brep";
+    BRepTools::Write(shape, filename.c_str());
 }
