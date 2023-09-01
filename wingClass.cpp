@@ -132,13 +132,31 @@ TopoDS_Shape wingClass::ExtrudeProfile(const TopoDS_Wire& profile, double l)
 
 void wingClass::ExportFile(std::string filename, int index, TopoDS_Shape& extrudedShape)
 {
-    if (index == 0) ExportToBREP(extrudedShape, filename);
+    if (index == 0) ExportToSTEP(extrudedShape, filename);
     if (index == 1) ExportToBREP(extrudedShape, filename);
-    if (index == 2) ExportToBREP(extrudedShape, filename);
+    if (index == 2) ExportToIGES(extrudedShape, filename);
 }
 
 void wingClass::ExportToBREP(TopoDS_Shape& shape, std::string filename)
 {
     filename = filename + ".brep";
     BRepTools::Write(shape, filename.c_str());
+}
+
+void wingClass::ExportToIGES(TopoDS_Shape& shape, std::string filename)
+{
+    filename = filename + ".iges";
+    IGESControl_Controller::Init();
+    IGESControl_Writer writer("MM", 0);
+    writer.AddShape(shape);
+    writer.ComputeModel();
+    writer.Write(filename.c_str());
+}
+
+void wingClass::ExportToSTEP(TopoDS_Shape& shape, std::string filename)
+{
+    filename = filename + ".step";
+    STEPControl_Writer writer;
+    IFSelect_ReturnStatus status = writer.Transfer(shape, STEPControl_AsIs);
+    status = writer.Write(filename.c_str());
 }
