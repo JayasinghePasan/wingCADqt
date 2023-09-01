@@ -38,8 +38,6 @@ wingClass::wingClass(std::string wingName, double chord, double span, int index,
 }
 
 
-
-
 //read the wing data file located at AeroFoilDat directory
 //and add all the (x,y) coordinates to the vector<> dataVector
 int wingClass::readFiles()
@@ -107,8 +105,6 @@ TopoDS_Wire wingClass::Create2DProfile(const std::vector<std::pair<double, doubl
         gp_Pnt p3d(pair.first, pair.second, 0.0);
         polygonMaker.Add(p3d);
     }
-
-    // Close the polygon
     polygonMaker.Close();
 
     if (!polygonMaker.IsDone())
@@ -130,6 +126,7 @@ TopoDS_Shape wingClass::ExtrudeProfile(const TopoDS_Wire& profile, double l)
 }
 
 
+//select the cad export format
 void wingClass::ExportFile(std::string filename, int index, TopoDS_Shape& extrudedShape)
 {
     if (index == 0) ExportToSTEP(extrudedShape, filename);
@@ -137,12 +134,16 @@ void wingClass::ExportFile(std::string filename, int index, TopoDS_Shape& extrud
     if (index == 2) ExportToIGES(extrudedShape, filename);
 }
 
+
+//create .brep file under given file name
 void wingClass::ExportToBREP(TopoDS_Shape& shape, std::string filename)
 {
     filename = filename + ".brep";
     BRepTools::Write(shape, filename.c_str());
 }
 
+
+//create .iges file under given file name
 void wingClass::ExportToIGES(TopoDS_Shape& shape, std::string filename)
 {
     filename = filename + ".iges";
@@ -153,6 +154,8 @@ void wingClass::ExportToIGES(TopoDS_Shape& shape, std::string filename)
     writer.Write(filename.c_str());
 }
 
+
+//create .step file under given file name
 void wingClass::ExportToSTEP(TopoDS_Shape& shape, std::string filename)
 {
     filename = filename + ".step";
