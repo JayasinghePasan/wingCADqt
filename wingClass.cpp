@@ -138,7 +138,7 @@ void wingClass::ExportFile(std::string filename, int index, TopoDS_Shape& extrud
 //create .brep file under given file name
 void wingClass::ExportToBREP(TopoDS_Shape& shape, std::string filename)
 {
-    filename = filename + ".brep";
+    filename = "CAD_Exports/" + filename + ".brep";
     BRepTools::Write(shape, filename.c_str());
 }
 
@@ -146,7 +146,7 @@ void wingClass::ExportToBREP(TopoDS_Shape& shape, std::string filename)
 //create .iges file under given file name
 void wingClass::ExportToIGES(TopoDS_Shape& shape, std::string filename)
 {
-    filename = filename + ".iges";
+    filename = "CAD_Exports/" + filename + ".iges";
     IGESControl_Controller::Init();
     IGESControl_Writer writer("MM", 0);
     writer.AddShape(shape);
@@ -158,7 +158,7 @@ void wingClass::ExportToIGES(TopoDS_Shape& shape, std::string filename)
 //create .step file under given file name
 void wingClass::ExportToSTEP(TopoDS_Shape& shape, std::string filename)
 {
-    filename = filename + ".step";
+    filename = "CAD_Exports/" + filename + ".step";
     STEPControl_Writer writer;
     IFSelect_ReturnStatus status = writer.Transfer(shape, STEPControl_AsIs);
     status = writer.Write(filename.c_str());
