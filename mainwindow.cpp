@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     statusBar()->showMessage("Aerofoil Tools by Pasan Jayasinghe Version 0.1");
+
+
 }
 
 MainWindow::~MainWindow()
