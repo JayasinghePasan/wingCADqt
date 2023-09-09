@@ -14,12 +14,12 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QFrame>
-#include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QOpenGLWidget>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextEdit>
@@ -49,7 +49,7 @@ public:
     QPushButton *buildButton;
     QFrame *frame;
     QVBoxLayout *verticalLayout;
-    QGraphicsView *graphicsView;
+    QOpenGLWidget *openGLWidget;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -149,10 +149,10 @@ public:
         frame->setFrameShadow(QFrame::Raised);
         verticalLayout = new QVBoxLayout(frame);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        graphicsView = new QGraphicsView(frame);
-        graphicsView->setObjectName(QString::fromUtf8("graphicsView"));
+        openGLWidget = new QOpenGLWidget(frame);
+        openGLWidget->setObjectName(QString::fromUtf8("openGLWidget"));
 
-        verticalLayout->addWidget(graphicsView);
+        verticalLayout->addWidget(openGLWidget);
 
 
         gridLayout_4->addWidget(frame, 0, 0, 1, 1);
@@ -160,7 +160,7 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 21));
+        menubar->setGeometry(QRect(0, 0, 800, 26));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));

@@ -35,6 +35,8 @@ wingClass::wingClass(std::string wingName, double chord, double span, int index,
     TopoDS_Shape extrudedShape = ExtrudeProfile( profile, spanLength);
     ExportFile(filename, index, extrudedShape);
 
+    currentShape = ExtrudeProfile(profile, spanLength);
+    ExportFile("current", index, currentShape);
 }
 
 

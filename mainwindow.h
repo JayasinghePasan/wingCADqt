@@ -5,6 +5,7 @@
 #include <QTextEdit>
 #include <QFile>
 #include <QTextStream>
+#include "OCCViewerWidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,6 +28,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    OCCViewerWidget* occViewer;
 
     void saveTextToFile(const QString &text);
 

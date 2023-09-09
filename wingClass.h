@@ -35,5 +35,8 @@ public:
     wingClass(std::string wingName, double chord, double span, int index, std::string filename);
     std::string wingName;                                   //stores wing name
     std::vector <std::pair<double, double>> dataVector;     //stores coordinates in 0-1 frame
+
+    TopoDS_Shape currentShape;
+    TopoDS_Shape getShape() const { return currentShape; }
 };
 

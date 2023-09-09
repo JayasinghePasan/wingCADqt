@@ -8,17 +8,20 @@
 #include <QTreeWidgetItem>
 #include <QIcon>
 
+#include "OCCViewerWidget.h"
 
-MainWindow::MainWindow(QWidget *parent)
+
+MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-
 {
     ui->setupUi(this);
     statusBar()->showMessage("Aerofoil Tools by Pasan Jayasinghe Version 0.1");
 
-
+    occViewer = new OCCViewerWidget(ui->openGLWidget);
+    occViewer->setParent(ui->openGLWidget);
 }
+
 
 MainWindow::~MainWindow()
 {
@@ -46,6 +49,8 @@ void MainWindow::saveTextToFile(const QString &text) {
 
 
 #include "wingClass.h"
+#include <BRepPrimAPI_MakeBox.hxx>
+
 
 void MainWindow::on_buildButton_clicked()
 {
@@ -55,7 +60,9 @@ void MainWindow::on_buildButton_clicked()
     int index = ui->formatComboBox->currentIndex();
     const QString filename = ui->filename->text();
     wingClass thiswing("defaultRequest",chord, span, index, filename.toStdString());
-
+    //occViewer->displayShape(thiswing.getShape());
+    TopoDS_Shape simpleBox = BRepPrimAPI_MakeBox(10, 10, 10).Shape();
+    occViewer->displayShape(simpleBox);
 }
 
 
