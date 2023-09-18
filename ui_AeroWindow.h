@@ -24,37 +24,34 @@ public:
     QToolBar* mainToolBar;
     QStatusBar* statusBar;
 
-    void setupUi(QMainWindow* tGenWindow)
+    void setupUi(QMainWindow* aeroWindow)
     {
-        if (tGenWindow->objectName().isEmpty())
-            tGenWindow->setObjectName(QString::fromUtf8("TGenWindow"));
+        if (aeroWindow->objectName().isEmpty())
+            aeroWindow->setObjectName(QString::fromUtf8("AeroWindow"));
 
-        tGenWindow->resize(800, 600);
-        actionClose = new QAction(tGenWindow);
+        aeroWindow->resize(800, 600);
+        actionClose = new QAction(aeroWindow);
         actionClose->setObjectName(QString::fromUtf8("actionClose"));
-        centralWidget = new QWidget(tGenWindow);
+        centralWidget = new QWidget(aeroWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
-        tGenWindow->setCentralWidget(centralWidget);
-        menuBar = new QMenuBar(tGenWindow);
+        aeroWindow->setCentralWidget(centralWidget);
+        menuBar = new QMenuBar(aeroWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 400, 21));
-        tGenWindow->setMenuBar(menuBar);
-        //mainToolBar = new QToolBar(TGenWindow);
-            //mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
-        //TGenWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
-        statusBar = new QStatusBar(tGenWindow);
+        aeroWindow->setMenuBar(menuBar);
+        statusBar = new QStatusBar(aeroWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
-        tGenWindow->setStatusBar(statusBar);
+        aeroWindow->setStatusBar(statusBar);
 
-        retranslateUi(tGenWindow);
+        retranslateUi(aeroWindow);
 
-        QMetaObject::connectSlotsByName(tGenWindow);
+        QMetaObject::connectSlotsByName(aeroWindow);
     } // setupUi
 
-    void retranslateUi(QMainWindow* tGenWindow)
+    void retranslateUi(QMainWindow* aeroWindow)
     {
-        tGenWindow->setWindowTitle(QCoreApplication::translate("TGenWindow", "TurboGenCAE", nullptr));
-        actionClose->setText(QCoreApplication::translate("TGenWindow", "Close", nullptr));
+        aeroWindow->setWindowTitle(QCoreApplication::translate("AeroWindow", "AeroTool 3D by PasanJ", nullptr));
+        actionClose->setText(QCoreApplication::translate("AeroWindow", "Close", nullptr));
     } // retranslateUi
 
 };
