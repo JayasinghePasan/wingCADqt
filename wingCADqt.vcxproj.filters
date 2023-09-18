@@ -40,17 +40,26 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mainwindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="coolTools.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
     <ClCompile Include="wingClass.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="OCCViewerWidget.cpp">
-      <Filter>Generated Files</Filter>
+    <ClCompile Include="AeroView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AeroWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AeroDocument.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AeroDrillBoxDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AeroCoolTools.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -62,24 +71,31 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="mainwindow.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="coolTools.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="wingClass.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="AeroDocument.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AeroCoolTools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_AeroWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="mainwindow.h">
+    <QtMoc Include="AeroView.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="OCCViewerWidget.h">
-      <Filter>Generated Files</Filter>
+    <QtMoc Include="AeroWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AeroDrillBoxDialog.h">
+      <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>
