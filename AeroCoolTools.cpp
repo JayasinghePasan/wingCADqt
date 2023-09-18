@@ -1,6 +1,6 @@
 #include "AeroCoolTools.h"
 
-//TGenCAE
+//Aero
 //OCCT
 #include <TopoDS_Face.hxx>
 #include <BRepAdaptor_CompCurve.hxx>

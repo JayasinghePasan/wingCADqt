@@ -37,13 +37,7 @@ protected:
 private slots:
     void exit(void);
     void onMakeSphere();
-    void onSumSlot();
-    void onListMenuBoundSlot();
-    void onListMenuOccuranceSlot();
-    void onListMenuBubbleSortSlot();
-    void onListMenuQuickSortSlot();
-    void onMakeBottleSlot();
-    void onMakeDrillBoxSlot();
+    void onBuildButtonSlot();
     
     //////////////////////////////////////////////
     //void on_textEdit_textChanged();
@@ -70,24 +64,17 @@ private:
     QAction* bottomAction;
     QAction* leftAction;
     QAction* rightAction;
-    QAction* zoomAction;
-    QAction* panAction;
-    QAction* rotateAction;
 
+
+    //primitive actions
     QAction* makeSphereAction;
-    QAction* sumAction;
-    QAction* listMenuBoundAction;
-    QAction* listMenuOccuranceAction;
-    QAction* listMenuBubbleSortAction;
-    QAction* listMenuQuickSortAction;
-    QAction* BottleMenuAction;
-    QAction* DrillBoxAction;
+    QAction* wingAction;
+
 
     //Menu bar
     QMenu* fileMenu;
     QMenu* primitiveMenu;
     QMenu* viewMenu;
-    QMenu* sumMenu;
     QMenu* listMenu;
 
 
