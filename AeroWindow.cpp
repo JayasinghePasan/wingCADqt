@@ -240,12 +240,15 @@ void AeroWindow::onMakeSphere()
 	}
 }
 
+// handles the request from AeroDocument classBuild Button Slot 
+// creates a wingClass object and display it on the QOpenGlWidget
+// chord length, span length, save file name will be taken from the UI
 void AeroWindow::handleBuildRequest(double& chord, double& span, int& index, QString& filename)
 {
 	wingClass thiswing("defaultRequest", chord, span, index, filename.toStdString());
 	TopoDS_Shape wingShape = thiswing.getShape();
 	myView->clearView();
-	myView->displayShape(wingShape, Quantity_NOC_YELLOW);
+	myView->displayShape(wingShape, Quantity_NOC_RED);
 	myView->fitAll();
 }
 

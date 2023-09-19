@@ -4,8 +4,16 @@
 #include <QString>
 #include <vector>
 
+#include <TopoDS.hxx>
 #include <TopoDS_Wire.hxx>
 #include <BRepBuilderAPI_MakePolygon.hxx>
+#include <BRepBuilderAPI_MakeFace.hxx>
+#include <TColgp_Array1OfPnt.hxx>
+#include <Geom_BSplineCurve.hxx>
+#include <GeomAPI_Interpolate.hxx>
+#include <BRepBuilderAPI_MakeEdge.hxx>
+#include <BRepBuilderAPI_MakeWire.hxx>
+#include <Precision.hxx>
 #include <stdexcept>
 #include <BRepPrimAPI_MakePrism.hxx>
 #include <gp_Vec.hxx>

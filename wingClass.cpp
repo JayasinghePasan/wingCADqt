@@ -90,42 +90,71 @@ int wingClass::updateVector()
     if (dataVector.empty()) return 0;
     for (int i = 0 ; i < dataVector.size() ; i++)
     {
-        //under develpment
+        dataVector[i].first *= chordLength;
     }
     return 1;
 }
 
 
 //create a 2d profile of the points at dataVector
-TopoDS_Wire wingClass::Create2DProfile(const std::vector<std::pair<double, double>>&dataVector)
+TopoDS_Wire wingClass::Create2DProfile(const std::vector<std::pair<double, double>>& dataVector)
 {
-    BRepBuilderAPI_MakePolygon polygonMaker;
+    // 1. Transfer the points from dataVector to a format OpenCASCADE can work with
+    TColgp_Array1OfPnt pointArray(1, static_cast<Standard_Integer>(dataVector.size()));
 
+    Standard_Integer index = 1;
     for (const auto& pair : dataVector)
     {
-        // Convert the 2D point (stored as a pair) to a 3D point (Z coordinate is 0)
         gp_Pnt p3d(pair.first, pair.second, 0.0);
-        polygonMaker.Add(p3d);
+        pointArray.SetValue(index, p3d);
+        index++;
     }
-    polygonMaker.Close();
 
-    if (!polygonMaker.IsDone())
+    // 2. Create the B-spline curve interpolating the points
+    Handle(Geom_BSplineCurve) bspline;
+    Handle(TColgp_HArray1OfPnt) hArray = new TColgp_HArray1OfPnt(pointArray);
+    GeomAPI_Interpolate interpolator(hArray, Standard_False, Precision::Confusion());
+    interpolator.Perform();
+    bspline = interpolator.Curve();
+
+    // 3. Convert the B-spline curve to an edge and then a wire
+    BRepBuilderAPI_MakeEdge edgeMaker(bspline);
+    BRepBuilderAPI_MakeWire wireMaker;
+    wireMaker.Add(edgeMaker.Edge());
+
+    if (!wireMaker.IsDone())
     {
-        // Handle error: the polygon wasn't created correctly
-        throw std::runtime_error("Failed to create the 2D profile.");
+        // Handle error: the wire wasn't created correctly
+        throw std::runtime_error("Failed to create the 2D B-spline profile.");
     }
 
-    return polygonMaker.Wire();
+    return wireMaker.Wire();
 }
 
 
-//create a extrusion of a given 2d profile by length of l
+
 TopoDS_Shape wingClass::ExtrudeProfile(const TopoDS_Wire& profile, double l)
 {
+    // Create a face from the 2D profile
+    BRepBuilderAPI_MakeFace faceMaker(profile);
+    if (!faceMaker.IsDone()) {
+        // Handle error
+        throw std::runtime_error("Failed to create face from the 2D profile.");
+    }
+    TopoDS_Face face = faceMaker.Face();
+
+    // Now, extrude the face to get a solid
     gp_Vec extrusionDirection(0, 0, l);  // Extrude in the Z direction
-    BRepPrimAPI_MakePrism prismMaker(profile, extrusionDirection);
+    BRepPrimAPI_MakePrism prismMaker(face, extrusionDirection);
+    if (!prismMaker.IsDone()) {
+        // Handle error
+        throw std::runtime_error("Failed to extrude the face.");
+    }
     return prismMaker.Shape();
 }
+
+
+
 
 
 //select the cad export format

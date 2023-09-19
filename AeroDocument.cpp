@@ -30,11 +30,11 @@ void AeroDocument::setupUi()
 {
     spinBoxChordLength = new QDoubleSpinBox(this);
     spinBoxChordLength->setSuffix(" cm");
-    spinBoxChordLength->setValue(5.00);
+    spinBoxChordLength->setValue(1.00);
 
     spinBoxSpanLength  = new QDoubleSpinBox(this);
     spinBoxSpanLength->setSuffix(" cm");
-    spinBoxSpanLength->setValue(12.00);
+    spinBoxSpanLength->setValue(2.00);
     
     labelChordLength = new QLabel(this);
     labelSpanLength  = new QLabel(this);
