@@ -13,16 +13,23 @@
 
 
 //Constructor
-wingClass::wingClass(std::string wingName, double chord, double span, int index, std::string filename) {
-    this->wingName    = wingName;
-    this->chordLength = chord;
-    this->spanLength  = span;
 
-    if (this->readFiles())
+wingClass::wingClass(double chord = 1.0, double span = 1.0, QString textCoords = "") {
+    //this->wingName    = wingName;
+    this->chordLength = chord;
+    this->spanLength = span;
+    if (textCoords == "")
     {
-        //############## QT Console ##################
-        std::cout << "Wing Object " << this->wingName << " created successfully." << std::endl;
-        //############################################
+        if (this->readFiles())
+        {
+            //############## QT Console ##################
+            std::cout << "Wing Object " << this->wingName << " created successfully." << std::endl;
+            //############################################
+        }
+    }
+    else
+    {
+        this->readFromQString(textCoords);
     }
     if (this->updateVector())
     {
@@ -30,13 +37,8 @@ wingClass::wingClass(std::string wingName, double chord, double span, int index,
         std::cout << "Wing Object " << this->wingName << " updated successfully." << std::endl;
         //############################################
     }
-
     TopoDS_Wire profile = Create2DProfile(dataVector);
-    TopoDS_Shape extrudedShape = ExtrudeProfile( profile, spanLength);
-    ExportFile(filename, index, extrudedShape);
-
-    currentShape = ExtrudeProfile(profile, spanLength);
-    ExportFile("current", index, currentShape);
+    extrudedShape = ExtrudeProfile(profile, spanLength);
 }
 
 
@@ -82,6 +84,38 @@ int wingClass::readFiles()
     file.close();
     return 1;
 }
+
+
+int wingClass::readFromQString(const QString& content)
+{
+    // Convert the QString to a stream for line-by-line processing
+    std::istringstream stream(content.toStdString());
+
+    // Recheck the name at the 1st line of the string content
+    std::string line;
+    getline(stream, line);
+    if (coolTools::trim(line) != this->wingName)
+    {
+        //############## QT Console ##################
+        std::cout << "String content name mismatch." << std::endl;
+        //############################################
+        //return 0;
+    }
+
+    // Read and process the remaining lines from the stream
+    while (getline(stream, line))
+    {
+        std::istringstream iss(line);
+        double x, y;
+        if (iss >> x >> y)
+        {
+            this->dataVector.push_back({ x, y });
+        }
+    }
+
+    return 1;
+}
+
 
 
 //update the data vecor with chordlength
@@ -155,14 +189,12 @@ TopoDS_Shape wingClass::ExtrudeProfile(const TopoDS_Wire& profile, double l)
 
 
 
-
-
 //select the cad export format
-void wingClass::ExportFile(std::string filename, int index, TopoDS_Shape& extrudedShape)
+void wingClass::ExportFile(std::string filename, int index)
 {
-    if (index == 0) ExportToSTEP(extrudedShape, filename);
-    if (index == 1) ExportToBREP(extrudedShape, filename);
-    if (index == 2) ExportToIGES(extrudedShape, filename);
+    if (index == 0) ExportToSTEP(this->extrudedShape, filename);
+    if (index == 1) ExportToIGES(this->extrudedShape, filename);
+    if (index == 2) ExportToBREP(this->extrudedShape, filename);
 }
 
 
