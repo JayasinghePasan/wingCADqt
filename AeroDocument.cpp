@@ -1,6 +1,6 @@
 #include "AeroDocument.h"
 
-//TGenCAE
+//Aero
 //OCCT
 #include <AIS_Shape.hxx>
 #include <BRepPrimAPI_MakeSphere.hxx>
