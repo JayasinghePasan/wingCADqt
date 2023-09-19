@@ -7,30 +7,56 @@
 #include <TDocStd_Document.hxx>
 
 //QT
-#include <QString>
+#include <QtCore/QVariant>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QDoubleSpinBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QWidget>
 
 class AeroView;
 
-class AeroDocument
+class AeroDocument : public QWidget
 {
-public:
-	AeroDocument();
-	~AeroDocument();
+    Q_OBJECT
 
 public:
-	// Make a sphere with given radius
-	// @param sphereShape - Return generated box shape
-	// @param radius - Radius of the sphere
-	// @return true if sphere generation is success
-	bool makeSphere(TopoDS_Shape& sphereShape, double radius);
+    AeroDocument(QWidget* parent = nullptr);
 
-	// Make a box with given length, width, radius
-	// @param boxShape - Return generated box shape
-	// @param length - length of the box
-	// @param width  - width of the box
-	// @param height - height of the box
-	// @return true if box generation is success
-	bool makeDrillBox(TopoDS_Shape& boxShape, double length, double width, double height);
+private slots:
+    void handleButton1Click();
+    void handleButton2Click();
+    // ... Other button handlers ...
+
+private:
+
+    QDoubleSpinBox* spinBoxChordLength;
+    QDoubleSpinBox* spinBoxSpanLength;
+    QLabel* labelChordLength;
+    QLabel* labelSpanLength;
+    QLabel* labelFormat;
+    QLabel* labelFilename;
+    
+    QPushButton* pushButtonBuild;
+    QPushButton* pushButtonExport;
+
+    QComboBox* comboBoxFormat;
+    
+    QTextEdit* textEditCoord;
+    
+    QLineEdit* lineEditFileName;
+    
+
+    void setupUi();
+
+public:
+	bool AeroDocument::makeSphere(TopoDS_Shape& sphereShape, double radius);
 
 };
 

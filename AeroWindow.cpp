@@ -2,7 +2,6 @@
 #include "ui_AeroWindow.h"
 #include "AeroView.h"
 #include "AeroDocument.h"
-#include "AeroCoolTools.h"
 #include "AeroWindow.h"
 #include "wingClass.h"
 
@@ -82,15 +81,24 @@ AeroWindow::AeroWindow(QWidget* parent) :
 	ui->setupUi(this);
 	myView = new AeroView();
 	myDocument = new AeroDocument();
-	setCentralWidget(myView);
+
+	// Create a horizontal layout
+	QHBoxLayout* layout = new QHBoxLayout(centralWidget());
+	layout->addWidget(myView, 3);  // 1 is the stretch factor
+	layout->addWidget(myDocument, 1);
+
+	centralWidget()->setLayout(layout);  // Apply the layout to the central widget
+
 	createAction();
 	createMenu();
 }
 
+
 AeroWindow::~AeroWindow()
 {
-	delete ui;
+    delete ui;
 }
+
 
 
 void AeroWindow::createMenu(void)
@@ -108,7 +116,7 @@ void AeroWindow::createMenu(void)
 	viewMenu->addAction(rightAction);
 
 
-	primitiveMenu = menuBar()->addMenu(tr("&Primitive"));
+	primitiveMenu = menuBar()->addMenu(tr("&Examples"));
 	primitiveMenu->addAction(makeSphereAction);
 	primitiveMenu->addAction(wingAction);
 

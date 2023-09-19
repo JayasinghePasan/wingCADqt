@@ -55,12 +55,6 @@
     <ClCompile Include="AeroDocument.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AeroDrillBoxDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AeroCoolTools.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="debug\moc_predefs.h.cbt">
@@ -77,12 +71,6 @@
     <ClInclude Include="wingClass.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="AeroDocument.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AeroCoolTools.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ui_AeroWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -94,7 +82,7 @@
     <QtMoc Include="AeroWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="AeroDrillBoxDialog.h">
+    <QtMoc Include="AeroDocument.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

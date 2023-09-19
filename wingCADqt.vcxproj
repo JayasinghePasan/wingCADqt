@@ -190,7 +190,6 @@
     </QtUic>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AeroCoolTools.cpp" />
     <ClCompile Include="AeroDocument.cpp" />
     <ClCompile Include="AeroView.cpp" />
     <ClCompile Include="coolTools.cpp" />
@@ -222,8 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="AeroView.h" />
-    <ClInclude Include="AeroCoolTools.h" />
-    <ClInclude Include="AeroDocument.h" />
+    <QtMoc Include="AeroDocument.h" />
     <ClInclude Include="coolTools.h" />
     <ClInclude Include="ui_AeroWindow.h" />
     <ClInclude Include="wingClass.h" />
