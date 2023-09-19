@@ -38,7 +38,9 @@ private slots:
     void exit(void);
     void onMakeSphere();
     void onBuildButtonSlot();
-    
+
+public slots:
+    void handleBuildRequest(double& chord, double& span, int& index, QString& filename);
     //////////////////////////////////////////////
     //void on_textEdit_textChanged();
     //////////////////////////////////////////////

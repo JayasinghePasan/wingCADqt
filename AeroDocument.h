@@ -29,11 +29,6 @@ class AeroDocument : public QWidget
 public:
     AeroDocument(QWidget* parent = nullptr);
 
-private slots:
-    void handleButton1Click();
-    void handleButton2Click();
-    // ... Other button handlers ...
-
 private:
 
     QDoubleSpinBox* spinBoxChordLength;
@@ -54,6 +49,16 @@ private:
     
 
     void setupUi();
+
+
+signals:
+    void requestBuild(double& chord, double& span, int& index, QString& filename);
+
+
+private slots:
+    void onBuildButtonSlot();
+    //void onExportButtonSlot();
+
 
 public:
 	bool AeroDocument::makeSphere(TopoDS_Shape& sphereShape, double radius);

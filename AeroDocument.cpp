@@ -1,6 +1,8 @@
-#include "AeroDocument.h"
-
 //Aero
+#include "AeroDocument.h"
+#include "AeroWindow.h"
+#include "wingClass.h"
+
 //OCCT
 #include <AIS_Shape.hxx>
 #include <BRepPrimAPI_MakeSphere.hxx>
@@ -44,13 +46,18 @@ void AeroDocument::setupUi()
     labelFormat     ->setText("Format");
     labelFilename   ->setText("Filename");
     
-    QPushButton* pushButtonBuild  = new QPushButton("Build", this);
-    QPushButton* pushButtonExport = new QPushButton("Export", this);
+    pushButtonBuild  = new QPushButton("Build", this);
+    pushButtonExport = new QPushButton("Export", this);
 
-    QComboBox* comboBoxFormat = new QComboBox(this);
+    comboBoxFormat = new QComboBox(this);
     comboBoxFormat->addItem(".step");
     comboBoxFormat->addItem(".iges");
     comboBoxFormat->addItem(".brep");
+    comboBoxFormat->setItemText(0, ".step");
+    comboBoxFormat->setItemText(1, ".iges");
+    comboBoxFormat->setItemText(2, ".brep");
+    comboBoxFormat->setCurrentIndex(0); // Selects the first item by default
+    //int index = comboBoxFormat->currentIndex();
 
 
     QTextEdit* textEditCoord = new QTextEdit(this);
@@ -93,21 +100,20 @@ void AeroDocument::setupUi()
     setLayout(layout);
 
     // Connect buttons to slots
-   // connect(button1, &QPushButton::clicked, this, &AeroDocument::handleButton1Click);
-    // ... Connect other buttons ...
+    connect(pushButtonBuild, &QPushButton::clicked, this, &AeroDocument::onBuildButtonSlot);
+
 }
 
-void AeroDocument::handleButton1Click()
+// creates a wingClass object and display it on the QOpenGlWidget
+// chord length, span length, save file name will be taken from the UI
+void AeroDocument::onBuildButtonSlot()
 {
-    // Handle the logic for button 1 click here
+    double chord = spinBoxChordLength->value();
+    double span  = spinBoxSpanLength->value();
+    int index = comboBoxFormat->currentIndex();
+    QString filename = "testfileName"; //ui->filename->text();
+    emit requestBuild(chord, span, index, filename);
 }
-
-void AeroDocument::handleButton2Click()
-{
-    // Handle the logic for button 2 click here
-}
-
-// ... Implement other button handlers ...
 
 // Make a sphere with given radius
 // @param sphereShape - Return generated box shape

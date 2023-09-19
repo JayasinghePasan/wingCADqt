@@ -89,6 +89,8 @@ AeroWindow::AeroWindow(QWidget* parent) :
 
 	centralWidget()->setLayout(layout);  // Apply the layout to the central widget
 
+	connect(myDocument, &AeroDocument::requestBuild, this, &AeroWindow::handleBuildRequest);
+
 	createAction();
 	createMenu();
 }
@@ -236,6 +238,15 @@ void AeroWindow::onMakeSphere()
 			myView->fitAll();
 		}
 	}
+}
+
+void AeroWindow::handleBuildRequest(double& chord, double& span, int& index, QString& filename)
+{
+	wingClass thiswing("defaultRequest", chord, span, index, filename.toStdString());
+	TopoDS_Shape wingShape = thiswing.getShape();
+	myView->clearView();
+	myView->displayShape(wingShape, Quantity_NOC_YELLOW);
+	myView->fitAll();
 }
 
 
