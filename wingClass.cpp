@@ -1,5 +1,7 @@
+//Aero
 #include "wingClass.h"
 
+//Std
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -8,35 +10,19 @@
 #include <sstream>
 #include <windows.h>
 
-#include "coolTools.h"
 
 
-
-//Constructor
-
+// default contructor create a complete wing object including the TopoDs_Shape
 wingClass::wingClass(double chord = 1.0, double span = 1.0, QString textCoords = "") {
-    //this->wingName    = wingName;
+    
     this->chordLength = chord;
     this->spanLength = span;
-    if (textCoords == "")
-    {
-        if (this->readFiles())
-        {
-            //############## QT Console ##################
-            std::cout << "Wing Object " << this->wingName << " created successfully." << std::endl;
-            //############################################
-        }
-    }
-    else
-    {
-        this->readFromQString(textCoords);
-    }
-    if (this->updateVector())
-    {
-        //############## QT Console ##################
-        std::cout << "Wing Object " << this->wingName << " updated successfully." << std::endl;
-        //############################################
-    }
+
+    if (textCoords == "") {this->readFiles();}  // for examples, data read from example's text file
+    else {this->readFromQString(textCoords);}   // for coordinates pased on text box
+    
+    this->updateVector(); // update lengths
+
     TopoDS_Wire profile = Create2DProfile(dataVector);
     extrudedShape = ExtrudeProfile(profile, spanLength);
 }
@@ -51,25 +37,12 @@ int wingClass::readFiles()
 
     if (!file.is_open())
     {
-        //############## QT Console ##################
         std::cout << "Error opening the file at " << fileLocation << std::endl;
-        //############################################
         return 0;
     }
 
-
-
-    //Recheck the name at the 1st line of the txt file
-    //return 0 and print error msg
     std::string line;
-    getline(file, line);
-    if (coolTools::trim(line) != this->wingName)
-    {
-        //############## QT Console ##################
-        std::cout << "Text file name mismatch with the content." << std::endl;
-        //############################################
-        //return 0;
-    }
+    getline(file, line); // Skips the firstline since airfoiltools.com data comes with firstline being the airfoil name
 
     // Read and process the remaining lines
     while (getline(file, line))
@@ -86,21 +59,14 @@ int wingClass::readFiles()
 }
 
 
+
 int wingClass::readFromQString(const QString& content)
 {
     // Convert the QString to a stream for line-by-line processing
     std::istringstream stream(content.toStdString());
 
-    // Recheck the name at the 1st line of the string content
     std::string line;
-    getline(stream, line);
-    if (coolTools::trim(line) != this->wingName)
-    {
-        //############## QT Console ##################
-        std::cout << "String content name mismatch." << std::endl;
-        //############################################
-        //return 0;
-    }
+    getline(stream, line);  // Skips the firstline since airfoiltools.com data comes with firstline being the airfoil name
 
     // Read and process the remaining lines from the stream
     while (getline(stream, line))
@@ -125,6 +91,7 @@ int wingClass::updateVector()
     for (int i = 0 ; i < dataVector.size() ; i++)
     {
         dataVector[i].first *= chordLength;
+        dataVector[i].second *= chordLength;
     }
     return 1;
 }

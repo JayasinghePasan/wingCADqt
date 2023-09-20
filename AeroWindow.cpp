@@ -79,21 +79,31 @@ AeroWindow::AeroWindow(QWidget* parent) :
 	ui(new Ui::AeroWindow)
 {
 	ui->setupUi(this);
-	myView = new AeroView();
-	myDocument = new AeroDocument();
+	myView = new AeroView();           //For CAD window 
+	myDocument = new AeroDocument();   //For Inputs 
 
-	// Create a horizontal layout
+	// Creates a horizontal layout
+	//  ___________________________________________
+	// |                       |                   |
+	// |   AeroView::          |  AeroDocument::   |
+	// |    myView             |   myDomucent      |
+	// |    CAD                |   Inputs          |
+	// |_______________________|___________________|
+	//  <----------3----------><---------1--------->
+	
 	QHBoxLayout* layout = new QHBoxLayout(centralWidget());
-	layout->addWidget(myView, 3);  // 1 is the stretch factor
+	layout->addWidget(myView, 3);       // 3 is the stretch factor
 	layout->addWidget(myDocument, 1);
 
 	centralWidget()->setLayout(layout);  // Apply the layout to the central widget
 
+	// Connecting Signals given by myDocument pushButtons with SLOTS of myView to trigger CAD display area
 	connect(myDocument, &AeroDocument::requestBuild, this, &AeroWindow::handleBuildRequest);
 	connect(myDocument, &AeroDocument::requestExport, this, &AeroWindow::handleExportRequest);
 
 	createAction();
 	createMenu();
+	
 }
 
 
@@ -106,77 +116,66 @@ AeroWindow::~AeroWindow()
 
 void AeroWindow::createMenu(void)
 {
+	// menubar menu 1 -> File
 	fileMenu = menuBar()->addMenu(tr("&File"));
-	fileMenu->addAction(exitAction);
+	fileMenu->addAction(exitAction);   // File->Exit
 
+	// menubar menu 2 -> View 
 	viewMenu = menuBar()->addMenu(tr("&View"));
-	viewMenu->addAction(fitAllAction);
-	viewMenu->addAction(frontAction);
-	viewMenu->addAction(backAction);
-	viewMenu->addAction(topAction);
-	viewMenu->addAction(bottomAction);
-	viewMenu->addAction(leftAction);
-	viewMenu->addAction(rightAction);
+	viewMenu->addAction(fitAllAction); // View->Fit to All
+	viewMenu->addAction(frontAction);  // View->Front
+	viewMenu->addAction(backAction);   // View->Back
+	viewMenu->addAction(topAction);    // View->Top
+	viewMenu->addAction(bottomAction); // View->Bottom
+	viewMenu->addAction(leftAction);   // View->Left
+	viewMenu->addAction(rightAction);  // View->Right
 
-
-	primitiveMenu = menuBar()->addMenu(tr("&Examples"));
-	primitiveMenu->addAction(makeSphereAction);
-	primitiveMenu->addAction(wingAction);
+	// menubar menu 3 -> Examples
+	exampleMenu = menuBar()->addMenu(tr("&Examples"));
+	exampleMenu->addAction(wingAction);        //NACA 0016
 
 }
 
 void AeroWindow::createAction(void)
 {
-	//Exi Action
+	// Exi Action
 	exitAction = new QAction(tr("Exit"), this);
-	exitAction->setStatusTip(tr("Eixt the application"));
 	connect(exitAction, SIGNAL(triggered()), this, SLOT(exit()));
 
-	//View Actionss
+	// View Actions
+	// Name and the Slot name is differently connected to get the Std view of a wing
 	fitAllAction = new QAction(tr("FitAll"), this);
-	fitAllAction->setStatusTip(tr("Fit All"));
 	connect(fitAllAction, SIGNAL(triggered()), myView, SLOT(fitAll()));
 
 	frontAction = new QAction(tr("Back"), this);
-	frontAction->setStatusTip(tr("Back View"));
 	connect(frontAction, SIGNAL(triggered()), myView, SLOT(front()));
 
 	backAction = new QAction(tr("Front"), this);
-	backAction->setStatusTip(tr("Front View"));
 	connect(backAction, SIGNAL(triggered()), myView, SLOT(back()));
 
 	topAction = new QAction(tr("Left"), this);
-	topAction->setStatusTip(tr("Left View"));
 	connect(topAction, SIGNAL(triggered()), myView, SLOT(top()));
 
 	bottomAction = new QAction(tr("Right"), this);
-	bottomAction->setStatusTip(tr("Right View"));
 	connect(bottomAction, SIGNAL(triggered()), myView, SLOT(bottom()));
 
 	leftAction = new QAction(tr("Top"), this);
-	leftAction->setStatusTip(tr("Top View"));
 	connect(leftAction, SIGNAL(triggered()), myView, SLOT(left()));
 
 	rightAction = new QAction(tr("Bottom"), this);
-	rightAction->setStatusTip(tr("Bottom View"));
 	connect(rightAction, SIGNAL(triggered()), myView, SLOT(right()));
 
 
 
-	//Primitive Actions
-	makeSphereAction = new QAction(tr("Sphere"), this);
-	makeSphereAction->setStatusTip(tr("Make a Sphere"));
-	connect(makeSphereAction, SIGNAL(triggered()), this, SLOT(onMakeSphere()));
-
-	wingAction = new QAction(tr("Sample Wing NACA0016"), this);
-	wingAction->setStatusTip(tr("Make a Wing"));
+	//Example Actions
+	wingAction = new QAction(tr("NACA 0016"), this);
 	connect(wingAction, SIGNAL(triggered()), this, SLOT(onExampleWingSlot()));
 }
 
 
 // Slot Functions
 
-// File->Exit - Close the program window
+// File->Exit
 void AeroWindow::exit(void)
 {
 	this->close();
@@ -184,72 +183,23 @@ void AeroWindow::exit(void)
 
 
 // creates a wingClass object and display it on the QOpenGlWidget
-// chord length, span length, save file name will be taken from the UI
+// default chord length and span length
 void AeroWindow::onExampleWingSlot()
 {
-	
 	double chord = 1.0;
 	double span = 2.0;
-	wingClass thiswing(chord, span, "");
-	TopoDS_Shape wingShape = thiswing.getShape();
-	myView->clearView();
-	myView->displayShape(wingShape, Quantity_NOC_YELLOW);
-	myView->fitAll();
-
-	QTime currentTime = QTime::currentTime();
-	QString timeString = currentTime.toString("hh:mm:ss");  // format the time as hours:minutes:seconds
-	statusBar()->showMessage(QString("Example Wing  NACA 0016   Chord = 1.0 mm  Span = 2.0 mm                              Created at : %1").arg(timeString));
-	
-	}
-
-
-// creates a ball
-void AeroWindow::onMakeSphere()
-{
-	//Create a dialog box to get input from users
-	QDialog* inputDialog = new QDialog();
-
-	QLabel* labelRadius = new QLabel(tr("&Radius:"));
-	QDoubleSpinBox* spinBoxRadius = new QDoubleSpinBox();
-	spinBoxRadius->setRange(1.0e-7, DBL_MAX);
-	spinBoxRadius->setValue(10.0);
-	labelRadius->setBuddy(spinBoxRadius);
-
-	QGridLayout* gridLayout = new QGridLayout;
-	gridLayout->addWidget(labelRadius, 0, 0);
-	gridLayout->addWidget(spinBoxRadius, 0, 1);
-
-	QDialogButtonBox* buttonBox = new QDialogButtonBox(inputDialog);
-	//buttonBox->setBaseSize(QSize(200, 0));
-	buttonBox->setLayoutDirection(Qt::LeftToRight);
-	buttonBox->setOrientation(Qt::Horizontal);
-	buttonBox->setStandardButtons(QDialogButtonBox::Cancel | QDialogButtonBox::Ok);
-
-	gridLayout->addWidget(buttonBox, 1, 1);
-	inputDialog->setLayout(gridLayout);
-
-	QObject::connect(buttonBox, SIGNAL(accepted()), inputDialog, SLOT(accept()));
-	QObject::connect(buttonBox, SIGNAL(rejected()), inputDialog, SLOT(reject()));
-
-	if (inputDialog->exec() == QDialog::Accepted)
-	{
-		double radius = spinBoxRadius->value();
-
-		TopoDS_Shape shape;
-		if (myDocument->makeSphere(shape, radius))
-		{
-			myView->clearView();
-			myView->displayShape(shape, Quantity_NOC_YELLOW);
-			myView->fitAll();
-		}
-	}
+	QString text = "";
+	handleBuildRequest(chord, span, text);
 }
 
 
 
-// handles the request from AeroDocument classBuild Button Slot 
+// handles the request of AeroDocument::requestBuild() 
 // creates a wingClass object and display it on the QOpenGlWidget
-// chord length, span length, save file name will be taken from the UI
+// @para chord = wing chord length
+// @para span  = wing span length 
+// @para textCoords = Coordinates pasted on the QTextEdit as a QString
+// chord, span & textCoords will be given from AeroDocument
 void AeroWindow::handleBuildRequest(double& chord, double& span, QString& textCoords)
 {
 	wingClass* thisWing = new wingClass(chord, span, textCoords);
@@ -259,10 +209,12 @@ void AeroWindow::handleBuildRequest(double& chord, double& span, QString& textCo
 	myView->displayShape(wingShape, Quantity_NOC_RED);
 	myView->fitAll();
 
+	// For status bar update
 	QTime currentTime = QTime::currentTime();
-	QString timeString = currentTime.toString("hh:mm:ss");  // format the time as hours:minutes:seconds
+	QString timeString = currentTime.toString("hh:mm:ss");
 
 	// Split the textCoords to get the first line
+	// Firstline usually contains the name of the aerofoil
 	QStringList lines = textCoords.split("\n");
 	QString firstLine = lines.isEmpty() ? "" : lines.first();
 
@@ -276,6 +228,13 @@ void AeroWindow::handleBuildRequest(double& chord, double& span, QString& textCo
 	statusBar()->showMessage(statusMessage);
 }
 
+
+
+// handles the request of AeroDocument::requestExport() 
+// Exports the displayed wing to Exports directory in project folder    // *** Currently nly work in debug mode *** //
+// @para index = CAD format (0-.stp , 1-.brep , 2-.iges)
+// @para filename  = output file name 
+// index & filename will be given from AeroDocument
 void AeroWindow::handleExportRequest(int& index, QString& filename)
 {
 	currentWing->ExportFile(filename.toStdString(), index);

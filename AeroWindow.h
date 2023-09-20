@@ -37,15 +37,12 @@ protected:
 
 private slots:
     void exit(void);
-    void onMakeSphere();
-    void onExampleWingSlot();
+    
 
 public slots:
+    void onExampleWingSlot();
     void handleBuildRequest(double& chord, double& span, QString& textCoords);
     void handleExportRequest(int& index, QString& filename);
-    //////////////////////////////////////////////
-    //void on_textEdit_textChanged();
-    //////////////////////////////////////////////
 
 private:
     Ui::AeroWindow *ui;
@@ -54,9 +51,6 @@ private:
 
     wingClass* currentWing;
 
-    /////////////////////////////////////////////
-    //void saveTextToFile(const QString &text);
-    /////////////////////////////////////////////
 
 private:
     QAction* exitAction;
@@ -72,15 +66,13 @@ private:
 
 
     //primitive actions
-    QAction* makeSphereAction;
     QAction* wingAction;
 
 
     //Menu bar
     QMenu* fileMenu;
-    QMenu* primitiveMenu;
+    QMenu* exampleMenu;
     QMenu* viewMenu;
-    QMenu* listMenu;
 
 
 

@@ -40,12 +40,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="coolTools.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="wingClass.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="AeroView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -53,6 +47,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AeroDocument.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wingClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,13 +62,10 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="coolTools.h">
-      <Filter>Generated Files</Filter>
+    <ClInclude Include="ui_AeroWindow.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="wingClass.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ui_AeroWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

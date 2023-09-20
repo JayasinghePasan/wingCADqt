@@ -56,7 +56,7 @@ void AeroDocument::setupUi()
     comboBoxFormat->setItemText(0, ".step");
     comboBoxFormat->setItemText(1, ".iges");
     comboBoxFormat->setItemText(2, ".brep");
-    comboBoxFormat->setCurrentIndex(0); // Selects the first item by default
+    comboBoxFormat->setCurrentIndex(0); 
 
 
     textEditCoord = new QTextEdit(this);
@@ -120,26 +120,4 @@ void AeroDocument::onExportButtonSlot()
     int index = comboBoxFormat->currentIndex();
     QString filename = lineEditFileName->text();
     emit requestExport(index, filename);
-}
-
-// Make a sphere with given radius
-// @param sphereShape - Return generated box shape
-// @param radius - Radius of the sphere
-// @return true if sphere generation is success
-bool AeroDocument::makeSphere(TopoDS_Shape& sphereShape, double radius)
-{
-    if (radius <= 0.0)
-        return false;
-
-    try
-    {
-        OCC_CATCH_SIGNALS
-            sphereShape = BRepPrimAPI_MakeSphere(radius).Shape();
-    }
-    catch (Standard_Failure)
-    {
-        return false;
-    }
-
-    return true;
 }

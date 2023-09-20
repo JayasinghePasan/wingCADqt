@@ -18,8 +18,8 @@
 // Only include for Windows
 #include <WNT_Window.hxx>
 
-#define GTTS_BK_COLOR_TOP 0.133, 0.424, 0.667
-#define GTTS_BK_COLOR_BOTTOM 0.801, 0.91, 1
+#define GTTS_BK_COLOR_TOP 0.8, 0.8, 0.8
+#define GTTS_BK_COLOR_BOTTOM 0.5, 0.5, 0.5
 
 
 static Handle(OpenGl_GraphicDriver)& GetGraphicDriver()
