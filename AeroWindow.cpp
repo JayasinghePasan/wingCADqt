@@ -3,7 +3,6 @@
 #include "AeroView.h"
 #include "AeroDocument.h"
 #include "AeroWindow.h"
-#include "wingClass.h"
 
 //OCCT
 #include <BRepPrimAPI_MakeBox.hxx>
@@ -73,6 +72,7 @@
 #include <QProcess>
 #include <qvector.h>
 #include <qwidget.h>
+#include <QTime>
 
 AeroWindow::AeroWindow(QWidget* parent) :
 	QMainWindow(parent),
@@ -90,6 +90,7 @@ AeroWindow::AeroWindow(QWidget* parent) :
 	centralWidget()->setLayout(layout);  // Apply the layout to the central widget
 
 	connect(myDocument, &AeroDocument::requestBuild, this, &AeroWindow::handleBuildRequest);
+	connect(myDocument, &AeroDocument::requestExport, this, &AeroWindow::handleExportRequest);
 
 	createAction();
 	createMenu();
@@ -136,28 +137,28 @@ void AeroWindow::createAction(void)
 	fitAllAction->setStatusTip(tr("Fit All"));
 	connect(fitAllAction, SIGNAL(triggered()), myView, SLOT(fitAll()));
 
-	frontAction = new QAction(tr("Front"), this);
-	frontAction->setStatusTip(tr("Front View"));
+	frontAction = new QAction(tr("Back"), this);
+	frontAction->setStatusTip(tr("Back View"));
 	connect(frontAction, SIGNAL(triggered()), myView, SLOT(front()));
 
-	backAction = new QAction(tr("Back"), this);
-	backAction->setStatusTip(tr("Back View"));
+	backAction = new QAction(tr("Front"), this);
+	backAction->setStatusTip(tr("Front View"));
 	connect(backAction, SIGNAL(triggered()), myView, SLOT(back()));
 
-	topAction = new QAction(tr("Top"), this);
-	topAction->setStatusTip(tr("Top View"));
+	topAction = new QAction(tr("Left"), this);
+	topAction->setStatusTip(tr("Left View"));
 	connect(topAction, SIGNAL(triggered()), myView, SLOT(top()));
 
-	bottomAction = new QAction(tr("Bottom"), this);
-	bottomAction->setStatusTip(tr("Bottom View"));
+	bottomAction = new QAction(tr("Right"), this);
+	bottomAction->setStatusTip(tr("Right View"));
 	connect(bottomAction, SIGNAL(triggered()), myView, SLOT(bottom()));
 
-	leftAction = new QAction(tr("Left"), this);
-	leftAction->setStatusTip(tr("Left View"));
+	leftAction = new QAction(tr("Top"), this);
+	leftAction->setStatusTip(tr("Top View"));
 	connect(leftAction, SIGNAL(triggered()), myView, SLOT(left()));
 
-	rightAction = new QAction(tr("Right"), this);
-	rightAction->setStatusTip(tr("Right View"));
+	rightAction = new QAction(tr("Bottom"), this);
+	rightAction->setStatusTip(tr("Bottom View"));
 	connect(rightAction, SIGNAL(triggered()), myView, SLOT(right()));
 
 
@@ -167,9 +168,9 @@ void AeroWindow::createAction(void)
 	makeSphereAction->setStatusTip(tr("Make a Sphere"));
 	connect(makeSphereAction, SIGNAL(triggered()), this, SLOT(onMakeSphere()));
 
-	wingAction = new QAction(tr("Sample wing"), this);
+	wingAction = new QAction(tr("Sample Wing NACA0016"), this);
 	wingAction->setStatusTip(tr("Make a Wing"));
-	connect(wingAction, SIGNAL(triggered()), this, SLOT(onBuildButtonSlot()));
+	connect(wingAction, SIGNAL(triggered()), this, SLOT(onExampleWingSlot()));
 }
 
 
@@ -184,18 +185,22 @@ void AeroWindow::exit(void)
 
 // creates a wingClass object and display it on the QOpenGlWidget
 // chord length, span length, save file name will be taken from the UI
-void AeroWindow::onBuildButtonSlot()
+void AeroWindow::onExampleWingSlot()
 {
-	double chord = 1.0; //ui->chordDoubleSpinBox->value();
-	double span = 2.0;  // ui->spanDoubleSpinBox_2->value();
-	int index = 0;      //ui->formatComboBox->currentIndex();
-	const QString filename = "testfileName"; //ui->filename->text();
-	wingClass thiswing("defaultRequest", chord, span, index, filename.toStdString());
+	
+	double chord = 1.0;
+	double span = 2.0;
+	wingClass thiswing(chord, span, "");
 	TopoDS_Shape wingShape = thiswing.getShape();
 	myView->clearView();
 	myView->displayShape(wingShape, Quantity_NOC_YELLOW);
 	myView->fitAll();
-}
+
+	QTime currentTime = QTime::currentTime();
+	QString timeString = currentTime.toString("hh:mm:ss");  // format the time as hours:minutes:seconds
+	statusBar()->showMessage(QString("Example Wing  NACA 0016   Chord = 1.0 mm  Span = 2.0 mm                              Created at : %1").arg(timeString));
+	
+	}
 
 
 // creates a ball
@@ -240,15 +245,41 @@ void AeroWindow::onMakeSphere()
 	}
 }
 
-void AeroWindow::handleBuildRequest(double& chord, double& span, int& index, QString& filename)
+
+
+// handles the request from AeroDocument classBuild Button Slot 
+// creates a wingClass object and display it on the QOpenGlWidget
+// chord length, span length, save file name will be taken from the UI
+void AeroWindow::handleBuildRequest(double& chord, double& span, QString& textCoords)
 {
-	wingClass thiswing("defaultRequest", chord, span, index, filename.toStdString());
-	TopoDS_Shape wingShape = thiswing.getShape();
+	wingClass* thisWing = new wingClass(chord, span, textCoords);
+	currentWing = thisWing;
+	TopoDS_Shape wingShape = thisWing->getShape();
 	myView->clearView();
-	myView->displayShape(wingShape, Quantity_NOC_YELLOW);
+	myView->displayShape(wingShape, Quantity_NOC_RED);
 	myView->fitAll();
+
+	QTime currentTime = QTime::currentTime();
+	QString timeString = currentTime.toString("hh:mm:ss");  // format the time as hours:minutes:seconds
+
+	// Split the textCoords to get the first line
+	QStringList lines = textCoords.split("\n");
+	QString firstLine = lines.isEmpty() ? "" : lines.first();
+
+	// Create the status message
+	QString statusMessage = QString("%1       Chord = %2 mm  Span = %3 mm                              Created at : %4")
+		.arg(firstLine)
+		.arg(chord)
+		.arg(span)
+		.arg(timeString);
+
+	statusBar()->showMessage(statusMessage);
 }
 
+void AeroWindow::handleExportRequest(int& index, QString& filename)
+{
+	currentWing->ExportFile(filename.toStdString(), index);
+}
 
 
 

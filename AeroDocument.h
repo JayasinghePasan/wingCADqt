@@ -52,12 +52,13 @@ private:
 
 
 signals:
-    void requestBuild(double& chord, double& span, int& index, QString& filename);
+    void requestBuild(double& chord, double& span, QString& textCoords);
+    void requestExport(int& index, QString& filename);
 
 
 private slots:
     void onBuildButtonSlot();
-    //void onExportButtonSlot();
+    void onExportButtonSlot();
 
 
 public:

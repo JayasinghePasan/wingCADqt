@@ -29,12 +29,12 @@ AeroDocument::AeroDocument(QWidget* parent) : QWidget(parent)
 void AeroDocument::setupUi()
 {
     spinBoxChordLength = new QDoubleSpinBox(this);
-    spinBoxChordLength->setSuffix(" cm");
-    spinBoxChordLength->setValue(5.00);
+    spinBoxChordLength->setSuffix(" mm");
+    spinBoxChordLength->setValue(1.00);
 
     spinBoxSpanLength  = new QDoubleSpinBox(this);
-    spinBoxSpanLength->setSuffix(" cm");
-    spinBoxSpanLength->setValue(12.00);
+    spinBoxSpanLength->setSuffix(" mm");
+    spinBoxSpanLength->setValue(2.00);
     
     labelChordLength = new QLabel(this);
     labelSpanLength  = new QLabel(this);
@@ -57,13 +57,12 @@ void AeroDocument::setupUi()
     comboBoxFormat->setItemText(1, ".iges");
     comboBoxFormat->setItemText(2, ".brep");
     comboBoxFormat->setCurrentIndex(0); // Selects the first item by default
-    //int index = comboBoxFormat->currentIndex();
 
 
-    QTextEdit* textEditCoord = new QTextEdit(this);
+    textEditCoord = new QTextEdit(this);
     textEditCoord->setPlaceholderText("Paste Coordinates here. \nFirst line will be skipped.");
 
-    QLineEdit* lineEditFileName = new QLineEdit(this);
+    lineEditFileName = new QLineEdit(this);
     lineEditFileName->setPlaceholderText("Type filename here");
     
 
@@ -100,7 +99,8 @@ void AeroDocument::setupUi()
     setLayout(layout);
 
     // Connect buttons to slots
-    connect(pushButtonBuild, &QPushButton::clicked, this, &AeroDocument::onBuildButtonSlot);
+    connect(pushButtonBuild,  &QPushButton::clicked, this, &AeroDocument::onBuildButtonSlot);
+    connect(pushButtonExport, &QPushButton::clicked, this, &AeroDocument::onExportButtonSlot);
 
 }
 
@@ -110,9 +110,16 @@ void AeroDocument::onBuildButtonSlot()
 {
     double chord = spinBoxChordLength->value();
     double span  = spinBoxSpanLength->value();
+    QString textCoords = textEditCoord->toPlainText();
+    emit requestBuild(chord, span, textCoords);
+}
+
+
+void AeroDocument::onExportButtonSlot()
+{
     int index = comboBoxFormat->currentIndex();
-    QString filename = "testfileName"; //ui->filename->text();
-    emit requestBuild(chord, span, index, filename);
+    QString filename = lineEditFileName->text();
+    emit requestExport(index, filename);
 }
 
 // Make a sphere with given radius

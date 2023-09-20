@@ -2,6 +2,7 @@
 #define AEROWINDOW_H
 
 //Aero
+#include "wingClass.h";
 //OCCT
 //QT
 #include <QMainWindow>
@@ -37,10 +38,11 @@ protected:
 private slots:
     void exit(void);
     void onMakeSphere();
-    void onBuildButtonSlot();
+    void onExampleWingSlot();
 
 public slots:
-    void handleBuildRequest(double& chord, double& span, int& index, QString& filename);
+    void handleBuildRequest(double& chord, double& span, QString& textCoords);
+    void handleExportRequest(int& index, QString& filename);
     //////////////////////////////////////////////
     //void on_textEdit_textChanged();
     //////////////////////////////////////////////
@@ -49,6 +51,8 @@ private:
     Ui::AeroWindow *ui;
     AeroView* myView;
     AeroDocument* myDocument;
+
+    wingClass* currentWing;
 
     /////////////////////////////////////////////
     //void saveTextToFile(const QString &text);

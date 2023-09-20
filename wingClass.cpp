@@ -13,16 +13,23 @@
 
 
 //Constructor
-wingClass::wingClass(std::string wingName, double chord, double span, int index, std::string filename) {
-    this->wingName    = wingName;
-    this->chordLength = chord;
-    this->spanLength  = span;
 
-    if (this->readFiles())
+wingClass::wingClass(double chord = 1.0, double span = 1.0, QString textCoords = "") {
+    //this->wingName    = wingName;
+    this->chordLength = chord;
+    this->spanLength = span;
+    if (textCoords == "")
     {
-        //############## QT Console ##################
-        std::cout << "Wing Object " << this->wingName << " created successfully." << std::endl;
-        //############################################
+        if (this->readFiles())
+        {
+            //############## QT Console ##################
+            std::cout << "Wing Object " << this->wingName << " created successfully." << std::endl;
+            //############################################
+        }
+    }
+    else
+    {
+        this->readFromQString(textCoords);
     }
     if (this->updateVector())
     {
@@ -30,13 +37,8 @@ wingClass::wingClass(std::string wingName, double chord, double span, int index,
         std::cout << "Wing Object " << this->wingName << " updated successfully." << std::endl;
         //############################################
     }
-
     TopoDS_Wire profile = Create2DProfile(dataVector);
-    TopoDS_Shape extrudedShape = ExtrudeProfile( profile, spanLength);
-    ExportFile(filename, index, extrudedShape);
-
-    currentShape = ExtrudeProfile(profile, spanLength);
-    ExportFile("current", index, currentShape);
+    extrudedShape = ExtrudeProfile(profile, spanLength);
 }
 
 
@@ -84,56 +86,115 @@ int wingClass::readFiles()
 }
 
 
+int wingClass::readFromQString(const QString& content)
+{
+    // Convert the QString to a stream for line-by-line processing
+    std::istringstream stream(content.toStdString());
+
+    // Recheck the name at the 1st line of the string content
+    std::string line;
+    getline(stream, line);
+    if (coolTools::trim(line) != this->wingName)
+    {
+        //############## QT Console ##################
+        std::cout << "String content name mismatch." << std::endl;
+        //############################################
+        //return 0;
+    }
+
+    // Read and process the remaining lines from the stream
+    while (getline(stream, line))
+    {
+        std::istringstream iss(line);
+        double x, y;
+        if (iss >> x >> y)
+        {
+            this->dataVector.push_back({ x, y });
+        }
+    }
+
+    return 1;
+}
+
+
+
 //update the data vecor with chordlength
 int wingClass::updateVector()
 {
     if (dataVector.empty()) return 0;
     for (int i = 0 ; i < dataVector.size() ; i++)
     {
-        //under develpment
+        dataVector[i].first *= chordLength;
     }
     return 1;
 }
 
 
 //create a 2d profile of the points at dataVector
-TopoDS_Wire wingClass::Create2DProfile(const std::vector<std::pair<double, double>>&dataVector)
+TopoDS_Wire wingClass::Create2DProfile(const std::vector<std::pair<double, double>>& dataVector)
 {
-    BRepBuilderAPI_MakePolygon polygonMaker;
+    // 1. Transfer the points from dataVector to a format OpenCASCADE can work with
+    TColgp_Array1OfPnt pointArray(1, static_cast<Standard_Integer>(dataVector.size()));
 
+    Standard_Integer index = 1;
     for (const auto& pair : dataVector)
     {
-        // Convert the 2D point (stored as a pair) to a 3D point (Z coordinate is 0)
         gp_Pnt p3d(pair.first, pair.second, 0.0);
-        polygonMaker.Add(p3d);
+        pointArray.SetValue(index, p3d);
+        index++;
     }
-    polygonMaker.Close();
 
-    if (!polygonMaker.IsDone())
+    // 2. Create the B-spline curve interpolating the points
+    Handle(Geom_BSplineCurve) bspline;
+    Handle(TColgp_HArray1OfPnt) hArray = new TColgp_HArray1OfPnt(pointArray);
+    GeomAPI_Interpolate interpolator(hArray, Standard_False, Precision::Confusion());
+    interpolator.Perform();
+    bspline = interpolator.Curve();
+
+    // 3. Convert the B-spline curve to an edge and then a wire
+    BRepBuilderAPI_MakeEdge edgeMaker(bspline);
+    BRepBuilderAPI_MakeWire wireMaker;
+    wireMaker.Add(edgeMaker.Edge());
+
+    if (!wireMaker.IsDone())
     {
-        // Handle error: the polygon wasn't created correctly
-        throw std::runtime_error("Failed to create the 2D profile.");
+        // Handle error: the wire wasn't created correctly
+        throw std::runtime_error("Failed to create the 2D B-spline profile.");
     }
 
-    return polygonMaker.Wire();
+    return wireMaker.Wire();
 }
 
 
-//create a extrusion of a given 2d profile by length of l
+
 TopoDS_Shape wingClass::ExtrudeProfile(const TopoDS_Wire& profile, double l)
 {
+    // Create a face from the 2D profile
+    BRepBuilderAPI_MakeFace faceMaker(profile);
+    if (!faceMaker.IsDone()) {
+        // Handle error
+        throw std::runtime_error("Failed to create face from the 2D profile.");
+    }
+    TopoDS_Face face = faceMaker.Face();
+
+    // Now, extrude the face to get a solid
     gp_Vec extrusionDirection(0, 0, l);  // Extrude in the Z direction
-    BRepPrimAPI_MakePrism prismMaker(profile, extrusionDirection);
+    BRepPrimAPI_MakePrism prismMaker(face, extrusionDirection);
+    if (!prismMaker.IsDone()) {
+        // Handle error
+        throw std::runtime_error("Failed to extrude the face.");
+    }
     return prismMaker.Shape();
 }
 
 
+
 //select the cad export format
-void wingClass::ExportFile(std::string filename, int index, TopoDS_Shape& extrudedShape)
+void wingClass::ExportFile(std::string filename, int index)
 {
-    if (index == 0) ExportToSTEP(extrudedShape, filename);
-    if (index == 1) ExportToBREP(extrudedShape, filename);
-    if (index == 2) ExportToIGES(extrudedShape, filename);
+    if (index == 0) ExportToSTEP(this->extrudedShape, filename);
+    if (index == 1) ExportToIGES(this->extrudedShape, filename);
+    if (index == 2) ExportToBREP(this->extrudedShape, filename);
 }
 
 
