@@ -362,3 +362,21 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /CAD_Exports
+/openvr_api.dll
+/Qt5Core.dll
+/Qt5Gui.dll
+/Qt5Widgets.dll
+/TKBRep.dll
+/TKernel.dll
+/TKGeomAlgo.dll
+/TKGeomBase.dll
+/TKIGES.dll
+/TKLCAF.dll
+/TKMath.dll
+/TKOffset.dll
+/TKOpenGl.dll
+/TKPrim.dll
+/TKService.dll
+/TKSTEP.dll
+/TKTopAlgo.dll
+/TKV3d.dll
